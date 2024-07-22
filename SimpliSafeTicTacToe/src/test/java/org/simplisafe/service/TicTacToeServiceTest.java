@@ -170,14 +170,4 @@ class TicTacToeServiceTest {
         assertFalse(ticTacToeService.isGameOver(board));
     }
 
-    private TicTacToeBoard createTicTacToeBoard(String tilesString) {
-        List<List<Tile>> tiles = new ArrayList<>();
-        for (int i = 0; i < 32; i++) {
-
-        }
-        TicTacToeBoard board = new TicTacToeBoard();
-        board.setTiles(tiles);
-        return board;
-    }
-
 }
