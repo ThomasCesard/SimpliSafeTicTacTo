@@ -17,11 +17,23 @@ public class TicTacToeService {
      * or in a 2x2 box on the board.
      *
      * @param board a valid 4x4 tic-tac-toe board.
-     * @return true if there is a winner, false otherwise.
+     * @return the Tile of the winner, or an empty Tile if there is no winner.
      */
-    public boolean isWinner(TicTacToeBoard board) {
-        return checkCorners(board.getTiles()) || checkDiagonals(board.getTiles()) || checkVerticals(board.getTiles())
-                || checkHorizontals(board.getTiles()) || checkBoxes(board.getTiles());
+    public Tile getWinner(TicTacToeBoard board) {
+        Tile winner = checkCorners(board.getTiles());
+        if (Tile.E.equals(winner)) {
+            winner = checkDiagonals(board.getTiles());
+        }
+        if (Tile.E.equals(winner)) {
+            winner = checkVerticals(board.getTiles());
+        }
+        if (Tile.E.equals(winner)) {
+            winner = checkHorizontals(board.getTiles());
+        }
+        if (Tile.E.equals(winner)) {
+            winner = checkBoxes(board.getTiles());
+        }
+        return winner;
     }
 
     /**
@@ -46,49 +58,64 @@ public class TicTacToeService {
      * @return true if the game is over, false otherwise.
      */
     public boolean isGameOver(TicTacToeBoard board) {
-        return !canMove(board) || isWinner(board);
+        return !canMove(board) || !Tile.E.equals(getWinner(board));
     }
 
-    private boolean checkCorners (List<List<Tile>> tiles) {
+    private Tile checkCorners (List<List<Tile>> tiles) {
         Tile firstTile = tiles.get(0).get(0);
-        return !Tile.E.equals(firstTile)
+        boolean isWinner = !Tile.E.equals(firstTile)
                 && firstTile.equals(tiles.get(0).get(3))
                 && firstTile.equals(tiles.get(3).get(0))
                 && firstTile.equals(tiles.get(3).get(3));
+        return isWinner ? firstTile : Tile.E;
     }
 
-    private boolean checkDiagonals(List<List<Tile>> tiles) {
+    private Tile checkDiagonals(List<List<Tile>> tiles) {
         Tile upperLeftTile = tiles.get(0).get(0);
         Tile upperRightTile = tiles.get(0).get(3);
-        return !Tile.E.equals(upperLeftTile)
+
+        boolean upperLeftWinner = !Tile.E.equals(upperLeftTile)
                 && upperLeftTile.equals(tiles.get(1).get(1))
                 && upperLeftTile.equals(tiles.get(2).get(2))
-                && upperLeftTile.equals(tiles.get(3).get(3))
-                || !Tile.E.equals(upperRightTile)
+                && upperLeftTile.equals(tiles.get(3).get(3));
+        if (upperLeftWinner) {
+            return upperLeftTile;
+        }
+
+        boolean upperRightWinner = !Tile.E.equals(upperRightTile)
                 && upperRightTile.equals(tiles.get(1).get(2))
                 && upperRightTile.equals(tiles.get(2).get(1))
                 && upperRightTile.equals(tiles.get(3).get(0));
+        if (upperRightWinner) {
+            return upperRightTile;
+        }
+
+        return Tile.E;
     }
 
-    private boolean checkHorizontals(List<List<Tile>> tiles) {
+    private Tile checkHorizontals(List<List<Tile>> tiles) {
         return IntStream.range(0, 4)
-                .anyMatch(i -> {
+                .filter(i -> {
                     Tile firstTile = tiles.get(i).get(0);
                     return !Tile.E.equals(firstTile) && IntStream.range(1, 4)
                             .allMatch(j -> firstTile.equals(tiles.get(i).get(j)));
-                });
+                })
+                .mapToObj(i -> tiles.get(i).get(0))
+                .findAny().orElse(Tile.E);
     }
 
-    private boolean checkVerticals(List<List<Tile>> tiles) {
+    private Tile checkVerticals(List<List<Tile>> tiles) {
         return IntStream.range(0, 4)
-                .anyMatch(i -> {
+                .filter(i -> {
                     Tile firstTile = tiles.get(0).get(i);
                     return !Tile.E.equals(firstTile) && IntStream.range(1, 4)
                             .allMatch(j -> firstTile.equals(tiles.get(j).get(i)));
-                });
+                })
+                .mapToObj(i -> tiles.get(0).get(i))
+                .findAny().orElse(Tile.E);
     }
 
-    private boolean checkBoxes(List<List<Tile>> tiles) {
+    private Tile checkBoxes(List<List<Tile>> tiles) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 Tile currentTile = tiles.get(i).get(j);
@@ -97,11 +124,11 @@ public class TicTacToeService {
                         && currentTile.equals(tiles.get(i).get(j + 1))
                         && currentTile.equals(tiles.get(i + 1).get(j + 1));
                 if (validBox) {
-                    return true;
+                    return currentTile;
                 }
             }
         }
-        return false;
+        return Tile.E;
     }
 
 }

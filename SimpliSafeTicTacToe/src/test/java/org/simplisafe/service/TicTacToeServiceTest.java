@@ -7,15 +7,14 @@ import org.simplisafe.domain.TicTacToeBoard.Tile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TicTacToeServiceTest {
 
     private final TicTacToeService ticTacToeService = new TicTacToeService();
 
     @Test
-    void testIsWinner_horizontal() {
+    void testGetWinner_horizontal() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.X, Tile.X, Tile.X, Tile.X));
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.E));
@@ -24,11 +23,11 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertTrue(ticTacToeService.isWinner(board));
+        assertEquals(Tile.X, ticTacToeService.getWinner(board));
     }
 
     @Test
-    void testIsWinner_vertical() {
+    void testGetWinner_vertical() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.O));
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.O));
@@ -37,11 +36,11 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertTrue(ticTacToeService.isWinner(board));
+        assertEquals(Tile.O, ticTacToeService.getWinner(board));
     }
 
     @Test
-    void testIsWinner_diagonalTopLeft() {
+    void testGetWinner_diagonalTopLeft() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.X, Tile.E, Tile.E, Tile.E));
         tiles.add(List.of(Tile.E, Tile.X, Tile.E, Tile.E));
@@ -50,11 +49,11 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertTrue(ticTacToeService.isWinner(board));
+        assertEquals(Tile.X, ticTacToeService.getWinner(board));
     }
 
     @Test
-    void testIsWinner_diagonalTopRight() {
+    void testGetWinner_diagonalTopRight() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.O));
         tiles.add(List.of(Tile.E, Tile.E, Tile.O, Tile.E));
@@ -63,11 +62,11 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertTrue(ticTacToeService.isWinner(board));
+        assertEquals(Tile.O, ticTacToeService.getWinner(board));
     }
 
     @Test
-    void testIsWinner_corners() {
+    void testGetWinner_corners() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.X, Tile.E, Tile.E, Tile.X));
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.E));
@@ -76,11 +75,11 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertTrue(ticTacToeService.isWinner(board));
+        assertEquals(Tile.X, ticTacToeService.getWinner(board));
     }
 
     @Test
-    void testIsWinner_box() {
+    void testGetWinner_box() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.E));
         tiles.add(List.of(Tile.E, Tile.E, Tile.E, Tile.E));
@@ -89,11 +88,11 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertTrue(ticTacToeService.isWinner(board));
+        assertEquals(Tile.O, ticTacToeService.getWinner(board));
     }
 
     @Test
-    void testIsWinner_false() {
+    void testGetWinner_false() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.X, Tile.X, Tile.X, Tile.E));
         tiles.add(List.of(Tile.X, Tile.O, Tile.X, Tile.O));
@@ -102,7 +101,7 @@ class TicTacToeServiceTest {
         TicTacToeBoard board = new TicTacToeBoard();
         board.setTiles(tiles);
 
-        assertFalse(ticTacToeService.isWinner(board));
+        assertEquals(Tile.E, ticTacToeService.getWinner(board));
     }
 
     @Test
@@ -132,7 +131,7 @@ class TicTacToeServiceTest {
     }
 
     @Test
-    void isGameOver_isWinner() {
+    void isGameOver_getWinner() {
         List<List<Tile>> tiles = new ArrayList<>();
         tiles.add(List.of(Tile.X, Tile.X, Tile.X, Tile.O));
         tiles.add(List.of(Tile.X, Tile.O, Tile.X, Tile.O));
